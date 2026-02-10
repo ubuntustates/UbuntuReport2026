@@ -57,7 +57,7 @@ export function TimeFrameSelect() {
       onValueChange={handleTimeFrameChange}
     >
       <SelectTrigger
-        className="focus:outline-none !ring-0 !border-transparent min-w-[100px]
+        className="focus:outline-none !ring-0 !border-transparent w-full md:min-w-[100px]
                     focus:ring-0 focus:border-transparent bg-[#F2E8E8] rounded-[8px] md:text-[14px]"
       >
         <SelectValue placeholder="Time Frame" />

@@ -80,7 +80,7 @@ export default function NewsContent({ article }: NewsContentProps) {
         </h2>
 
         {article.summary && (
-          <p className="text-gray-700 text-[14px] leading-relaxed mb-2">
+          <p className="text-gray-700 text-[14px] break-words leading-relaxed mb-2">
             {displayedSummary}
           </p>
         )}

@@ -61,7 +61,7 @@ export default function CountrySearchSelect({ label, value, onChange }: Props) {
   }, [search, options]);
 
   return (
-    <div ref={wrapperRef} className="relative w-[180px]">
+    <div ref={wrapperRef} className="relative md:w-[180px] w-full">
       {/* Trigger */}
       <button
         onClick={() => setOpen((p) => !p)}

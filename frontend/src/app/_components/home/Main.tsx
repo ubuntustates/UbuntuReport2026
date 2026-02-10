@@ -88,25 +88,27 @@ export default function Main() {
   };
 
   return (
-    <main className="flex-1 h-full md:px-[50px] px-[20px] py-[53px]">
+    <main className="flex-1 h-full md:px-[50px] px-[20px] md:py-[53px] rounded-[10px] bg-white">
       {/* Header */}
-      <header className="flex justify-between mb-[35px] md:flex-row flex-col-reverse gap-y-7">
+      <header className="flex justify-between mb-[35px] md:flex-row flex-col gap-y-7 ">
         <p className="text-[20px] md:text-[28px] font-bold">Live News Feed</p>
 
-        <div className="flex gap-[12.18px] self-end flex-wrap">
-          {/* Category Select */}
-          <CategorySelect
-            onChange={(val) => {
-              fetchNewsWithFilters({ category: val ?? undefined });
-            }}
-          />
+        <div className="flex gap-[12.18px] self-end flex-wrap w-full md:w-fit">
+          <div className="flex gap-[12.18px] w-full md:w-fit">
+            {/* Category Select */}
+            <CategorySelect
+              onChange={(val) => {
+                fetchNewsWithFilters({ category: val ?? undefined });
+              }}
+            />
 
-          {/* Time Frame Select */}
-          <TimeFrameSelect
-            onChange={(val) => {
-              fetchNewsWithFilters({ timeFrame: val ?? undefined });
-            }}
-          />
+            {/* Time Frame Select */}
+            <TimeFrameSelect
+              onChange={(val) => {
+                fetchNewsWithFilters({ timeFrame: val ?? undefined });
+              }}
+            />
+          </div>
 
           {/* Country Select */}
           <CountrySearchSelect

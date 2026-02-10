@@ -1,41 +1,94 @@
-// src\app\_components\NavBar.tsx
 'use client'
 
-import { LanguageSelect } from "./LanguageSelect";
-import logo from '@/images/logo.png'
-import notificationBell from '@/images/notificationBell.png'
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
-export default function NavBar(){
+export default function NavBar() {
+  const pathname = usePathname()
+  const [menuOpen, setMenuOpen] = useState(false)
 
+  const linkClass = (path: string) =>
+    pathname === path
+      ? "font-semibold text-black"
+      : "text-gray-700 hover:text-black transition"
 
+  const handleLinkClick = () => {
+    setMenuOpen(false)
+  }
 
-    const pathname = usePathname()
-    return(
-        <nav className="z-50">
+  return (
+    <nav className="fixed top-0 z-50 w-full bg-white border-b border-[#D9D9D9]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="h-[72px] flex items-center justify-between">
 
-          <div className="flex md:flex-row flex-col gap-y-4 justify-between text-[16px] pb-[24px] bg-[#FFFFFF] md:px-[50px] px-[20px]
-                    border-b border-solid border-[#D9D9D9] items-center pt-[22px] fixed top-0 w-full">
-            <Link href="/" 
-              className="flex gap-2 items-center">
-                <Image src={logo} alt="logo" className="w-[19.25px] h-[19.68px]"/>
-                <p className="font-semibold text-[16px]">Global Emergency News</p>
-            </Link>
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2">
+            <img
+              src="/images/UbuntuReport_logo.png"
+              alt="UbuntuReport"
+              className="h-10 w-auto"
+            />
+          </Link>
 
-            <div className="flex md:w-fit w-full md:gap-[28px] justify-between items-center">
-              <Link href={'/'} className={pathname == "/"? "font-semibold": ""}>Home</Link>
-              <Link href={'/about'} className={pathname == "/about"? "font-semibold": ""}>About Us</Link>
-
-              <div className="flex gap-[13px]">
-                <LanguageSelect/>
-                <button className="px-[12px] bg-[#F2E8E8] rounded-[8px]">
-                  <Image src={notificationBell} alt="notification" className="w-[14px] h-auto"/>
-                </button>
-              </div>
-            </div>
+          {/* Desktop Nav */}
+          <div className="hidden md:flex gap-6 text-[15px]">
+            <Link href="/" className={linkClass("/")}>Home</Link>
+            <Link href="/about" className={linkClass("/about")}>About</Link>
+            <Link href="/contact" className={linkClass("/contact")}>Contact</Link>
+            <Link href="/privacy-policy" className={linkClass("/privacy-policy")}>Privacy Policy</Link>
           </div>
-        </nav>
-    )
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden flex items-center justify-center w-10 h-10 rounded-md hover:bg-gray-100 transition"
+            aria-label="Toggle menu"
+          >
+            <span className="text-2xl">
+              {menuOpen ? "✕" : "☰"}
+            </span>
+          </button>
+        </div>
+
+        {/* Mobile Dropdown */}
+        {menuOpen && (
+        <div className="md:hidden text-center border-t border-gray-200 py-4 space-y-3">
+          <Link
+            href="/"
+            onClick={handleLinkClick}
+            className={`block ${linkClass("/")}`}
+          >
+            Home
+          </Link>
+
+          <Link
+            href="/about"
+            onClick={handleLinkClick}
+            className={`block ${linkClass("/about")}`}
+          >
+            About
+          </Link>
+
+          <Link
+            href="/contact"
+            onClick={handleLinkClick}
+            className={`block ${linkClass("/contact")}`}
+          >
+            Contact
+          </Link>
+
+          <Link
+            href="/privacy-policy"
+            onClick={handleLinkClick}
+            className={`block ${linkClass("/privacy-policy")}`}
+          >
+            Privacy Policy
+          </Link>
+        </div>
+      )}
+
+      </div>
+    </nav>
+  )
 }

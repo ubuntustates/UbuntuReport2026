@@ -1,14 +1,14 @@
-// src\app\layout.tsx
-
+// src/app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 import NavBar from "./_components/NavBar";
+import { UBUNTU_REPORT_URL } from "@/utils/MyConstants";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
-  subsets: ['latin'],
-})
+  subsets: ["latin"],
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,9 +21,43 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Global Emergency News",
-  description: "ALX Frontend Engineering Capstone Project",
+  title: {
+    default: "Ubuntu Report — Pan-African News & Perspectives",
+    template: "%s | Ubuntu Report",
+  },
+  description:
+    "Ubuntu Report is a pan-African news platform delivering trusted, balanced, and African-centered reporting from every country across the continent.",
+  metadataBase: new URL(UBUNTU_REPORT_URL), // change to your real domain
+  openGraph: {
+    title: "Ubuntu Report — Pan-African News & Perspectives",
+    description:
+      "News from every African country. African stories, told with context, dignity, and unity.",
+    url: UBUNTU_REPORT_URL,
+    siteName: "Ubuntu Report",
+    images: [
+      {
+        url: "/og/ubuntu-report.png", // put this in /public/og/
+        width: 1200,
+        height: 630,
+        alt: "Ubuntu Report — Pan-African News",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ubuntu Report — Pan-African News & Perspectives",
+    description:
+      "All of Africa, one newsroom. Trusted reporting from across the continent.",
+    images: ["/og/ubuntu-report.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
+
 
 export default function RootLayout({
   children,
@@ -35,10 +69,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${newsreader.className} antialiased bg-[#FCF7F7]  `}
       >
-        <NavBar/>
-        <div className=" mt-[7rem] md:mt-[5rem] h-full">
-          {children}
+        <NavBar />
+
+        <div className="mt-[7rem] md:mt-[5rem]">
+          <div className="max-w-7xl mx-auto md:px-8">
+            {children}
+          </div>
         </div>
+
         
       </body>
     </html>
