@@ -58,7 +58,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # local Next.js dev server
-    "https://emergency-news2025.vercel.app",  # production Next.js
+    "https://ubuntureport.vercel.app",  # production Next.js
 ]
 
 
@@ -163,6 +163,6 @@ CELERY_RESULT_BACKEND = REDIS_URL
 # --- Default Primary Key ---
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-FALLBACK_NEWS_IMAGE = "https://res.cloudinary.com/devqbjptr/image/upload/v1762148783/a22dd152-efff-44f8-acf3-c0069ceed8ea.png"
+FALLBACK_NEWS_IMAGE = "https://res.cloudinary.com/dewgby1vd/image/upload/v1770741203/a22dd152-efff-44f8-acf3-c0069ceed8ea_soycrr.png"
 
 
