@@ -1,7 +1,7 @@
 # newsfeeds/management/commands/get_all_news.py
 from django.core.management.base import BaseCommand
 import newsfeeds.tasks  # import the module where tasks live
-from newsfeeds.tasks import NEWS_COMMANDS
+from newsfeeds.news_commands import NEWS_COMMANDS
 
 class Command(BaseCommand):
     help = "Trigger all news fetching Celery tasks"

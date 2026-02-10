@@ -95,7 +95,8 @@ DATABASES = {
     "default": dj_database_url.config(
         # First, check if DATABASE_URL is set in environment (e.g., from Docker)
         env="DATABASE_URL",
-        default="postgresql://emergency_news_db_g6eb_user:xHf8sjXRzBtUDzAvXygpRXGJeL9vi9nW@dpg-d5orgucoud1c739er1t0-a.oregon-postgres.render.com/emergency_news_db_g6eb",
+        # default="postgresql://emergency_news_db_g6eb_user:xHf8sjXRzBtUDzAvXygpRXGJeL9vi9nW@dpg-d5orgucoud1c739er1t0-a.oregon-postgres.render.com/emergency_news_db_g6eb",
+        default="postgresql://postgres.aguqzmpcugwepgqoifrb:ubuntu1reportt@aws-1-eu-west-1.pooler.supabase.com:5432/postgres",
         conn_max_age=600,
         ssl_require=True,
     )

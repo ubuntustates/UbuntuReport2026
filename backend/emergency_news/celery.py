@@ -4,7 +4,10 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 from django.conf import settings
-from newsfeeds.tasks import NEWS_COMMANDS
+
+
+from newsfeeds.news_commands import NEWS_COMMANDS
+
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'emergency_news.settings')
 
@@ -24,3 +27,10 @@ app.conf.beat_schedule = {
         'schedule': crontab(minute=0, hour='*'),
     } for task in NEWS_COMMANDS
 }
+
+app.conf.beat_schedule.update({
+    'cleanup-old-news-daily': {
+        'task': 'cleanup_old_news',
+        'schedule': crontab(hour=0, minute=30),  # every day at 00:30
+    },
+})
