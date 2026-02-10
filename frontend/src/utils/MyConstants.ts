@@ -6,8 +6,8 @@
 
 export const UBUNTU_REPORT_URL = "https://ubuntureport.vercel.app"
 
-export const DJANGO_API = "https://emergencynews2025.onrender.com/api"
+export const DJANGO_API = "https://ubuntureport.onrender.com/api"
 
 
 
-export const FALLBACK_NEWS_IMAGE = "https://res.cloudinary.com/devqbjptr/image/upload/v1762148783/a22dd152-efff-44f8-acf3-c0069ceed8ea.png"
+export const FALLBACK_NEWS_IMAGE = "https://res.cloudinary.com/dewgby1vd/image/upload/v1770741203/a22dd152-efff-44f8-acf3-c0069ceed8ea_soycrr.png"
