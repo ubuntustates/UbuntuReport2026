@@ -70,7 +70,7 @@ export default function NewsContent({ article }: NewsContentProps) {
   };
 
   return (
-    <article className="flex md:flex-row flex-col-reverse justify-between items-start gap-4 border-b pb-4">
+    <article className="flex md:flex-row flex-col-reverse justify-between items-start gap-4 bg-white rounded-xl p-5">
       {/* Text section */}
       <div className="md:w-[60%] w-full">
         <p className="text-[#994D4D] text-[13px] mb-1">{formattedTime}</p>

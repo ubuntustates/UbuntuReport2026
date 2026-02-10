@@ -88,7 +88,7 @@ export default function Main() {
   };
 
   return (
-    <main className="flex-1 h-full md:px-[50px] px-[20px] md:py-[53px] rounded-[10px] bg-white">
+    <main className="flex-1 h-full md:px-[50px] px-[20px] md:py-[53px] rounded-[10px] ">
       {/* Header */}
       <header className="flex justify-between mb-[35px] md:flex-row flex-col gap-y-7 ">
         <p className="text-[20px] md:text-[28px] font-bold">Live News Feed</p>
@@ -125,7 +125,7 @@ export default function Main() {
       </header>
 
       {/* Feed Section */}
-      <section className="flex flex-col md:gap-[32px] gap-[45px]">
+      <section className="flex flex-col md:gap-[32px] gap-[20px]">
         {loading && news.length === 0 && <p className="text-gray-500">Loading news...</p>}
         {error && <p className="text-red-500">⚠️ {error}</p>}
         {!loading && !error && news.length === 0 && (
