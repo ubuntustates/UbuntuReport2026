@@ -23,6 +23,7 @@ interface NewsState {
   selectedCountry: string | null;
   selectedTimeFrame: string | null;
   loading: boolean;
+  loadingMore: boolean;
   error: string | null;
 
   fetchAllNews: (filters?: {
@@ -54,6 +55,7 @@ export const useNewsStore = create<NewsState>((set, get) => ({
   selectedCountry: null,
   selectedTimeFrame: null,
   loading: false,
+  loadingMore: false,  
   error: null,
 
   /**
@@ -61,7 +63,8 @@ export const useNewsStore = create<NewsState>((set, get) => ({
    */
   fetchAllNews: async (filters = {}) => {
     const { timeFrame, category, region, country } = filters;
-    set({ loading: true, error: null });
+    set({ loading: true, error: null, news: [] }); // 👈 important
+
 
     try {
       const data = await fetchNews({ timeFrame, category, region, country });
@@ -118,7 +121,7 @@ export const useNewsStore = create<NewsState>((set, get) => ({
     const { next } = get();
     if (!next) return;
 
-    set({ loading: true });
+    set({ loadingMore: true });
     try {
       const data = await fetchNextPageFromUrl(next);
       set((state) => ({
@@ -126,15 +129,16 @@ export const useNewsStore = create<NewsState>((set, get) => ({
         next: data.next,
         previous: data.previous,
         count: data.count,
-        loading: false,
+        loadingMore: false,
       }));
     } catch (err: any) {
       set({
         error: err.message || "Failed to fetch next page",
-        loading: false,
+        loadingMore: false,
       });
     }
   },
+
 
   /**
    * Fetch all unique categories

@@ -43,11 +43,10 @@ export function CategorySelect({ onChange }: CategorySelectProps) {
   }, [categories]);
 
   const handleCategoryChange = (value: string) => {
-    if (value === "All") {
-      fetchAllNews();
-    } else {
-      fetchNewsByCategory(value);
-    }
+    fetchAllNews({
+      category: value === "All" ? undefined : value,
+    });
+
 
     // ✅ Call external onChange if provided
     if (onChange) onChange(value);

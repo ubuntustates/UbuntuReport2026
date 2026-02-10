@@ -7,6 +7,7 @@ import { CategorySelect } from "./CategorySelect";
 import { TimeFrameSelect } from "./TimeFrameSelect";
 import { fetchCountries } from "@/service/newsService";
 import CountrySearchSelect from "./CountrySearchSelect";
+import NewsSkeleton from "./NewsSkeleton";
 
 export default function Main() {
   const {
@@ -126,7 +127,14 @@ export default function Main() {
 
       {/* Feed Section */}
       <section className="flex flex-col md:gap-[32px] gap-[20px]">
-        {loading && news.length === 0 && <p className="text-gray-500">Loading news...</p>}
+        {loading && news.length === 0 && (
+          <>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <NewsSkeleton key={i} />
+            ))}
+          </>
+        )}
+
         {error && <p className="text-red-500">⚠️ {error}</p>}
         {!loading && !error && news.length === 0 && (
           <p className="text-gray-400">No news articles available.</p>

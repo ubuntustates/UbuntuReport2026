@@ -8,8 +8,8 @@ const PREDEFINED_TIME_FRAMES = [
   { label: "All Time", value: "all" },
   { label: "Today", value: "today" },
   { label: "Yesterday", value: "yesterday" },
-  { label: "Last Week", value: "last_week" },
-  { label: "Last Month", value: "last_month" },
+  { label: "Last 7 Days", value: "last_week" },
+  { label: "Last 30 Days", value: "last_month" },
 ];
 
 export function TimeFrameSelect() {
@@ -70,12 +70,6 @@ export function TimeFrameSelect() {
             value={value}
             className={value === "all" ? "font-normal" : ""}
           >
-            {label}
-          </SelectItem>
-        ))}
-
-        {monthOptions.map(({ value, label }) => (
-          <SelectItem key={value} value={value}>
             {label}
           </SelectItem>
         ))}
