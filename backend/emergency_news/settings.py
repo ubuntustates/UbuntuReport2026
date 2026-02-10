@@ -1,0 +1,168 @@
+# emergency_news/settings.py
+
+from pathlib import Path
+import os
+import dj_database_url
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# --- Security & Debug ---
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-placeholder-key")
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
+# Render automatically injects its hostname at runtime
+ALLOWED_HOSTS = ["*"]
+
+# --- Installed Apps ---
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+
+    "rest_framework",
+    "django_filters",
+    'drf_yasg',
+    "newsfeeds",
+    "corsheaders",
+]
+
+# --- Django REST Framework ---
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 40,
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",  # 👈 add this
+    ],
+}
+
+
+# --- Middleware ---
+MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # local Next.js dev server
+    "https://emergency-news2025.vercel.app",  # production Next.js
+]
+
+
+ROOT_URLCONF = "emergency_news.urls"
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = "emergency_news.wsgi.application"
+
+# --- Database ---
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
+
+# --- Database ---
+DATABASES = {
+    "default": dj_database_url.config(
+        # First, check if DATABASE_URL is set in environment (e.g., from Docker)
+        env="DATABASE_URL",
+        default="postgresql://emergency_news_db_g6eb_user:xHf8sjXRzBtUDzAvXygpRXGJeL9vi9nW@dpg-d5orgucoud1c739er1t0-a.oregon-postgres.render.com/emergency_news_db_g6eb",
+        conn_max_age=600,
+        ssl_require=True,
+    )
+}
+
+# --- Password Validators ---
+AUTH_PASSWORD_VALIDATORS = [
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+]
+
+# --- Internationalization ---
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "UTC"
+USE_I18N = True
+USE_TZ = True
+
+# --- Static Files ---
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Enable WhiteNoise for serving static files on Render
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
+# Optional but recommended
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# --- Celery & Redis ---
+# settings.py
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://red-d42qfff5r7bs73b96bqg:6379/0",  # your Redis URL
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Optional — helps ensure Django sessions also use Redis (recommended for performance)
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+
+
+# For Local
+# REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+# CELERY_BROKER_URL = REDIS_URL
+# CELERY_RESULT_BACKEND = REDIS_URL
+
+
+# For Docker (container Redis)
+REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
+
+# For Local Redis
+# REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+
+
+# --- Default Primary Key ---
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+FALLBACK_NEWS_IMAGE = "https://res.cloudinary.com/devqbjptr/image/upload/v1762148783/a22dd152-efff-44f8-acf3-c0069ceed8ea.png"
+
+
