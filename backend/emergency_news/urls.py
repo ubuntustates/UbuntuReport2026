@@ -6,10 +6,10 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Emergency News API",
+        title="UbuntuReport API",
         default_version='v1',
-        description="Aggregated emergency and breaking news from multiple sources.",
-        contact=openapi.Contact(email="support@chiadetech.com"),
+        description="Aggregated African breaking news from multiple sources.",
+        contact=openapi.Contact(email="adesinaolagunju1@gmail.com"),
         license=openapi.License(name="MIT License"),
     ),
     public=True,  # 👈 ensures schema is visible without login

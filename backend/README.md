@@ -1,8 +1,6 @@
-# Emergency News API
+# UbuntuReport API
 
-**Project Name:** Emergency News
-
-**Company:** ChiAde Tech
+**Project Name:** UbuntuReport
 
 **Author:** Adesina Olagunju ([daadesina1@gmail.com](mailto:daadesina1@gmail.com))
 
@@ -12,7 +10,7 @@
 
 ## Table of Contents
 
-- [Emergency News API](#emergency-news-api)
+- [UbuntuReport API](#ubuntureport-api)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
   - [Features](#features)
@@ -32,7 +30,7 @@
 
 ## Overview
 
-**Emergency News** is a Django-based API designed to aggregate news articles from multiple international sources and provide users with fast access to news across various categories. It fetches news via RSS feeds, stores them in a database, and exposes searchable and filterable REST API endpoints.
+**UbuntuReport** is a Django-based API designed to aggregate news articles from multiple international sources and provide users with fast access to news across various categories. It fetches news via RSS feeds, stores them in a database, and exposes searchable and filterable REST API endpoints.
 
 ---
 
@@ -203,4 +201,4 @@ The project uses **Celery** for background tasks and scheduling. News fetching t
 
 ## License
 
-This project is developed by **ChiAde Tech**. All rights reserved.
+This project is developed by **Adesina Olagunju**. All rights reserved.
