@@ -8,7 +8,7 @@ Restart Celery Beat (if running separately):
 Trigger the task manually (optional, to test):
     python manage.py shell
 
-    from newsfeeds.tasks import fetch_bbc_news, fetch_cnn_news, fetch_vanguard_news, fetch_aljazeera_news, fetch_guardian_news, fetch_channelstv_news, fetch_premiumtimes_news,fetch_allafrica_news, fetch_modernghana_news, fetch_myjoyonline_news, fetch_ghheadlines_news
+from newsfeeds.tasks import fetch_bbc_news, fetch_cnn_news, fetch_vanguard_news, fetch_aljazeera_news, fetch_guardian_news, fetch_channelstv_news, fetch_premiumtimes_news,fetch_allafrica_news, fetch_modernghana_news, fetch_myjoyonline_news, fetch_ghheadlines_news
 
 fetch_bbc_news.delay()
 fetch_cnn_news.delay()

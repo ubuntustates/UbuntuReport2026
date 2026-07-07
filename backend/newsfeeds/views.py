@@ -185,16 +185,31 @@ def countries_list(request):
 from django.db.models import Value
 from django.db.models.functions import Lower, Replace
 
-# Fixed set of sources for this endpoint (normalized: lowercase, no spaces)
-TOP_SOURCES = ['bbc', 'cnn', 'vanguard', 'channels']
+from .source_country_map import SOURCE_COUNTRY_MAP
+
+
+def _normalize(name):
+    return name.lower().replace(' ', '')
+
+
+# Countries whose sources we want, plus a couple of extra global sources
+PRIORITY_COUNTRIES = ['Nigeria', 'Kenya', 'Ghana']
+EXTRA_SOURCES = ['bbc', 'cnn']
+
+TOP_SOURCES = [
+    _normalize(source)
+    for country in PRIORITY_COUNTRIES
+    for source in SOURCE_COUNTRY_MAP.get(country, [])
+] + EXTRA_SOURCES
 
 
 @api_view(['GET'])
 def top_sources_recent_news(request):
     """
-    Returns news from BBC, CNN, Vanguard, and Channels published in the last 2 hours.
+    Returns news from Nigeria, Kenya, and Ghana sources, plus BBC and CNN,
+    published in the last 2 hours.
     """
-    cutoff = timezone.now() - timedelta(hours=3)
+    cutoff = timezone.now() - timedelta(hours=2)
 
     queryset = (
         NewsArticle.objects.annotate(
