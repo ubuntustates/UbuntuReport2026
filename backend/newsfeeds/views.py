@@ -194,7 +194,7 @@ def top_sources_recent_news(request):
     """
     Returns news from BBC, CNN, Vanguard, and Channels published in the last 2 hours.
     """
-    cutoff = timezone.now() - timedelta(hours=2)
+    cutoff = timezone.now() - timedelta(hours=3)
 
     queryset = (
         NewsArticle.objects.annotate(
