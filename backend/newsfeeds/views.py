@@ -3,11 +3,14 @@ from .models import NewsArticle, Country
 from .serializers import NewsArticleSerializer
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, CharFilter
 from django.utils import timezone
+from django.db.models import Value
+from django.db.models.functions import Lower, Replace
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .pagination import HttpsPagination
 import datetime
 from datetime import timedelta
+
 
 # Custom FilterSet for NewsArticle
 class NewsArticleFilter(FilterSet):
@@ -20,11 +23,18 @@ class NewsArticleFilter(FilterSet):
         fields = ['country', 'source', 'category']
 
 
+def normalize_source(value: str) -> str:
+    """Lowercase and remove all whitespace, e.g. 'The Guardian' -> 'theguardian'."""
+    return value.strip().lower().replace(' ', '')
+
+
 class NewsArticleViewSet(viewsets.ReadOnlyModelViewSet):
     """
     GET endpoints for NewsArticle
     Supports filtering by:
       - category, source, search
+      - sources: comma-separated list of normalized source names
+        e.g. ?sources=bbc,vanguard,channels,theguardian
       - flexible time_frame filters:
         today, yesterday, last_7_days, last_30_days
         this_week, last_week
@@ -41,6 +51,23 @@ class NewsArticleViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+
+        # --- Multi-source filter (normalized: lowercase, no spaces) ---
+        sources_param = self.request.query_params.get('sources')
+        if sources_param:
+            normalized_sources = [
+                normalize_source(s) for s in sources_param.split(',') if s.strip()
+            ]
+            if normalized_sources:
+                queryset = queryset.annotate(
+                    normalized_source=Replace(
+                        Lower('source'), Value(' '), Value('')
+                    )
+                ).filter(normalized_source__in=normalized_sources)
+            else:
+                queryset = queryset.none()
+
+        # --- Existing time_frame logic ---
         time_frame = self.request.query_params.get('time_frame')
 
         if not time_frame:
@@ -48,7 +75,6 @@ class NewsArticleViewSet(viewsets.ReadOnlyModelViewSet):
 
         now = timezone.now()
 
-        # Helper functions
         def start_of_week(dt):
             return dt - timedelta(days=dt.weekday())
 
@@ -107,8 +133,7 @@ class NewsArticleViewSet(viewsets.ReadOnlyModelViewSet):
                 queryset = queryset.filter(published__gte=start, published__lt=end)
 
             else:
-                # Parse YYYY-MM or YYYY
-                if len(tf) == 7 and '-' in tf:  # e.g., "2025-11"
+                if len(tf) == 7 and '-' in tf:
                     year, month = map(int, tf.split('-'))
                     start = timezone.make_aware(datetime.datetime(year, month, 1))
                     if month == 12:
@@ -117,7 +142,7 @@ class NewsArticleViewSet(viewsets.ReadOnlyModelViewSet):
                         end = timezone.make_aware(datetime.datetime(year, month + 1, 1))
                     queryset = queryset.filter(published__gte=start, published__lt=end)
 
-                elif len(tf) == 4:  # e.g., "2025"
+                elif len(tf) == 4:
                     year = int(tf)
                     start = timezone.make_aware(datetime.datetime(year, 1, 1))
                     end = timezone.make_aware(datetime.datetime(year + 1, 1, 1))
@@ -152,3 +177,37 @@ def countries_list(request):
         .order_by('name')
     )
     return Response(list(countries))
+
+
+
+
+
+from django.db.models import Value
+from django.db.models.functions import Lower, Replace
+
+# Fixed set of sources for this endpoint (normalized: lowercase, no spaces)
+TOP_SOURCES = ['bbc', 'cnn', 'vanguard', 'channels']
+
+
+@api_view(['GET'])
+def top_sources_recent_news(request):
+    """
+    Returns news from BBC, CNN, Vanguard, and Channels published in the last 2 hours.
+    """
+    cutoff = timezone.now() - timedelta(hours=2)
+
+    queryset = (
+        NewsArticle.objects.annotate(
+            normalized_source=Replace(Lower('source'), Value(' '), Value(''))
+        )
+        .filter(
+            normalized_source__in=TOP_SOURCES,
+            published__gte=cutoff,
+        )
+        .order_by('-published')
+    )
+
+    paginator = HttpsPagination()
+    page = paginator.paginate_queryset(queryset, request)
+    serializer = NewsArticleSerializer(page, many=True)
+    return paginator.get_paginated_response(serializer.data)
