@@ -193,7 +193,7 @@ def _normalize(name):
 
 
 # Countries whose sources we want, plus a couple of extra global sources
-PRIORITY_COUNTRIES = ['Nigeria', 'Kenya', 'Ghana']
+PRIORITY_COUNTRIES = ['Nigeria']
 EXTRA_SOURCES = ['bbc', 'cnn']
 
 TOP_SOURCES = [
@@ -207,9 +207,9 @@ TOP_SOURCES = [
 def top_sources_recent_news(request):
     """
     Returns news from Nigeria, Kenya, and Ghana sources, plus BBC and CNN,
-    published in the last 2 hours.
+    published in the last 1 hours.
     """
-    cutoff = timezone.now() - timedelta(hours=2)
+    cutoff = timezone.now() - timedelta(hours=1)
 
     queryset = (
         NewsArticle.objects.annotate(
