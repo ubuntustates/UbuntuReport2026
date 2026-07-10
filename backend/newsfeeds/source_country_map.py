@@ -2,6 +2,10 @@
 
 # Mapping of countries to their news sources
 SOURCE_COUNTRY_MAP = {
+    # International
+    "World": ["BBC", "CNN", "Al Jazeera", "DW", "France 24", "Sky News", "NPR World News", "The New York Times", "Le Monde International", "The Hindu", "The Japan Times"],
+    "Sport": ["DW Sport", "France 24 Sport", "BBC Sport", "Yahoo Sports", "CBS Sports", "Sporting News", "World Soccer Talk"],
+
     # North Africa
     "Algeria": [],
     "Egypt": [],

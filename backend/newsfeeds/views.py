@@ -226,3 +226,45 @@ def top_sources_recent_news(request):
     page = paginator.paginate_queryset(queryset, request)
     serializer = NewsArticleSerializer(page, many=True)
     return paginator.get_paginated_response(serializer.data)
+
+
+@api_view(['GET'])
+def world_recent_news(request):
+    """
+    Returns World news published in the last 2 hours.
+    """
+    cutoff = timezone.now() - timedelta(hours=2)
+
+    queryset = (
+        NewsArticle.objects.filter(
+            country__name__iexact='World',
+            published__gte=cutoff,
+        )
+        .order_by('-published')
+    )
+
+    paginator = HttpsPagination()
+    page = paginator.paginate_queryset(queryset, request)
+    serializer = NewsArticleSerializer(page, many=True)
+    return paginator.get_paginated_response(serializer.data)
+
+
+@api_view(['GET'])
+def sport_recent_news(request):
+    """
+    Returns Sport news published in the last 2 hours.
+    """
+    cutoff = timezone.now() - timedelta(hours=2)
+
+    queryset = (
+        NewsArticle.objects.filter(
+            country__name__iexact='Sport',
+            published__gte=cutoff,
+        )
+        .order_by('-published')
+    )
+
+    paginator = HttpsPagination()
+    page = paginator.paginate_queryset(queryset, request)
+    serializer = NewsArticleSerializer(page, many=True)
+    return paginator.get_paginated_response(serializer.data)
